@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>属性相克</title>
+    <style>
+        body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            border: none;
+            background-color: #222;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .box {
+            width: 800px;
+            /*height: 600px;*/
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            padding: 5px;
+        }
+
+        .title ul {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .title ul li {
+            width: 100px;
+            line-height: 50px;
+            border: 1px solid #ccc;
+            text-align: center;
+            margin: 10px;
+            border-radius: 6px;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .content {
+            /*width: 780px;*/
+            /*height: 350px;*/
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            margin: 0 auto;
+            padding: 15px;
+            color: #fff;
+        }
+
+        .content p {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .content-title {
+            width: 100px;
+            line-height: 50px;
+            border: 1px solid #ccc;
+            text-align: center;
+            margin: 10px;
+            border-radius: 6px;
+            color: #000;
+            background-color: #ccc;
+        }
+
+        .content .null span {
+            display: inline-block;
+            width: 100px;
+            line-height: 50px;
+            border: 1px solid #ccc;
+            text-align: center;
+            margin: 10px;
+            border-radius: 6px;
+            color: #000;
+            background-color: #ccc;
+            font-size: 24px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="title">
+        <ul>
+            <li style="background-color: #a8a878;" id="pu">普通</li>
+            <li style="background-color: #ff4422;" id="huo">火</li>
+            <li style="background-color: #3399ff;" id="shui">水</li>
+            <li style="background-color: #77cc55;" id="cao">草</li>
+            <li style="background-color: #ffcc33;" id="dian">电</li>
+            <li style="background-color: #77ddff;" id="bing">冰</li>
+            <li style="background-color: #c03028;" id="dou">格斗</li>
+            <li style="background-color: #8D2998;" id="du">毒</li>
+            <li style="background-color: #e0c068;" id="di">地面</li>
+            <li style="background-color: #a890f0;" id="fei">飞行</li>
+            <li style="background-color: #f85888;" id="chao">超能</li>
+            <li style="background-color: #aabb22;" id="chong">虫</li>
+            <li style="background-color: #b8a038;" id="yan">岩石</li>
+            <li style="background-color: #705898;" id="gui">幽灵</li>
+            <li style="background-color: #7766ee;" id="long">龙</li>
+            <li style="background-color: #775544;" id="er">恶</li>
+            <li style="background-color: #b8b8d0;" id="gang">钢</li>
+            <li style="background-color: #ee99ac;" id="yao">妖精</li>
+        </ul>
+    </div>
+    <div class="content">
+        <p>当前选中:</p>
+        <p class="content-title" id="content_title">--</p>
+        <p>克制:</p>
+        <div class="null">
+            <span id="k1">--</span>
+            <span id="k2">--</span>
+            <span id="k3">--</span>
+            <span id="k4">--</span>
+            <span id="k5">--</span>
+        </div>
+        <p>被克制:</p>
+        <div class="null">
+            <span id="bk1">--</span>
+            <span id="bk2">--</span>
+            <span id="bk3">--</span>
+            <span id="bk4">--</span>
+            <span id="bk5">--</span>
+        </div>
+        <p>一半伤害:</p>
+        <div class="null">
+            <span id="ff1">--</span>
+            <span id="ff2">--</span>
+            <span id="ff3">--</span>
+            <span id="ff4">--</span>
+            <span id="ff5">--</span>
+            <span id="ff6">--</span>
+            <span id="ff7">--</span>
+        </div>
+        <p>对下列属性攻击无效:</p>
+        <div class="null">
+            <span id="wx1">--</span>
+            <span id="wx2">--</span>
+            <span id="wx3">--</span>
+        </div>
+    </div>
+</div>
+
+<!--<script src="jquery/jquery.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(function () {
+        $('#pu').click(function () {
+            $('#content_title').text('普通').css('background-color', '#a8a878');
+            //克制
+            $('#k1').text('--').css('background-color', '#ccc');
+            $('#k2').text('--').css('background-color', '#ccc');
+            $('#k3').text('--').css('background-color', '#ccc');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('格斗').css('background-color', '#c03028');
+            $('#bk2').text('--').css('background-color', '#ccc');
+            $('#bk3').text('--').css('background-color', '#ccc');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('岩石').css('background-color', '#b8a038');
+            $('#ff2').text('钢').css('background-color', '#b8b8d0');
+            $('#ff3').text('--').css('background-color', '#ccc');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('幽灵').css('background-color', '#705898');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+        })
+        $('#huo').click(function () {
+            $('#content_title').text('火').css('background-color', '#ff4422');
+            //克制
+            $('#k1').text('草').css('background-color', '#77cc55');
+            $('#k2').text('冰').css('background-color', '#77ddff');
+            $('#k3').text('虫').css('background-color', '#aabb22');
+            $('#k4').text('钢').css('background-color', '#b8b8d0');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('水').css('background-color', '#3399ff');
+            $('#bk2').text('地面').css('background-color', '#e0c068');
+            $('#bk3').text('岩石').css('background-color', '#b8a038');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('火').css('background-color', '#ff4422');
+            $('#ff2').text('水').css('background-color', '#3399ff');
+            $('#ff3').text('岩石').css('background-color', '#b8a038');
+            $('#ff4').text('龙').css('background-color', '#7766ee');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('--').css('background-color', '#ccc');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#shui').click(function () {
+            $('#content_title').text('水').css('background-color', '#3399ff');
+            //克制
+            $('#k1').text('火').css('background-color', '#ff4422');
+            $('#k2').text('地面').css('background-color', '#e0c068');
+            $('#k3').text('岩石').css('background-color', '#b8a038');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('草').css('background-color', '#77cc55');
+            $('#bk2').text('电').css('background-color', '#ffcc33');
+            $('#bk3').text('--').css('background-color', '#ccc');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('水').css('background-color', '#3399ff');
+            $('#ff2').text('草').css('background-color', '#77cc55');
+            $('#ff3').text('龙').css('background-color', '#7766ee');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('--').css('background-color', '#ccc');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#cao').click(function () {
+            $('#content_title').text('草').css('background-color', '#77cc55');
+            //克制
+            $('#k1').text('水').css('background-color', '#3399ff');
+            $('#k2').text('地面').css('background-color', '#e0c068');
+            $('#k3').text('岩石').css('background-color', '#b8a038');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('火').css('background-color', '#ff4422');
+            $('#bk2').text('冰').css('background-color', '#77ddff');
+            $('#bk3').text('毒').css('background-color', '#8D2998');
+            $('#bk4').text('飞行').css('background-color', '#a890f0');
+            $('#bk5').text('虫').css('background-color', '#aabb22');
+            //一半伤害
+            $('#ff1').text('火').css('background-color', '#ff4422');
+            $('#ff2').text('草').css('background-color', '#77cc55');
+            $('#ff3').text('毒').css('background-color', '#8D2998');
+            $('#ff4').text('飞行').css('background-color', '#a890f0');
+            $('#ff5').text('虫').css('background-color', '#aabb22');
+            $('#ff6').text('龙').css('background-color', '#7766ee');
+            $('#ff7').text('钢').css('background-color', '#b8b8d0');
+            //攻击无效
+            $('#wx1').text('--').css('background-color', '#ccc');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#dian').click(function () {
+            $('#content_title').text('电').css('background-color', '#ffcc33');
+            //克制
+            $('#k1').text('水').css('background-color', '#3399ff');
+            $('#k2').text('飞行').css('background-color', '#a890f0');
+            $('#k3').text('--').css('background-color', '#ccc');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('地面').css('background-color', '#e0c068');
+            $('#bk2').text('--').css('background-color', '#ccc');
+            $('#bk3').text('--').css('background-color', '#ccc');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('草').css('background-color', '#77cc55');
+            $('#ff2').text('电').css('background-color', '#ffcc33');
+            $('#ff3').text('龙').css('background-color', '#7766ee');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('地面').css('background-color', '#e0c068');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+        })
+        $('#bing').click(function () {
+            $('#content_title').text('冰').css('background-color', '#77ddff');
+            //克制
+            $('#k1').text('草').css('background-color', '#77cc55');
+            $('#k2').text('地面').css('background-color', '#e0c068');
+            $('#k3').text('飞行').css('background-color', '#a890f0');
+            $('#k4').text('龙').css('background-color', '#7766ee');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('火').css('background-color', '#ff4422');
+            $('#bk2').text('格斗').css('background-color', '#c03028');
+            $('#bk3').text('岩石').css('background-color', '#b8a038');
+            $('#bk4').text('钢').css('background-color', '#b8b8d0');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('火').css('background-color', '#ff4422');
+            $('#ff2').text('水').css('background-color', '#3399ff');
+            $('#ff3').text('冰').css('background-color', '#77ddff');
+            $('#ff4').text('钢').css('background-color', '#b8b8d0');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('幽灵').css('background-color', '#705898');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#dou').click(function () {
+            $('#content_title').text('格斗').css('background-color', '#c03028');
+            //克制
+            $('#k1').text('普通').css('background-color', '#a8a878');
+            $('#k2').text('冰').css('background-color', '#77ddff');
+            $('#k3').text('岩石').css('background-color', '#b8a038');
+            $('#k4').text('恶').css('background-color', '#775544');
+            $('#k5').text('钢').css('background-color', '#b8b8d0');
+            //被克制
+            $('#bk1').text('飞行').css('background-color', '#a890f0');
+            $('#bk2').text('超能').css('background-color', '#f85888');
+            $('#bk3').text('妖精').css('background-color', '#ee99ac');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('毒').css('background-color', '#8D2998');
+            $('#ff2').text('飞行').css('background-color', '#a890f0');
+            $('#ff3').text('超能').css('background-color', '#f85888');
+            $('#ff4').text('虫').css('background-color', '#aabb22');
+            $('#ff5').text('妖精').css('background-color', '#ee99ac');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('幽灵').css('background-color', '#705898');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#du').click(function () {
+            $('#content_title').text('毒').css('background-color', '#8D2998');
+            //克制
+            $('#k1').text('草').css('background-color', '#77cc55');
+            $('#k2').text('妖精').css('background-color', '#ee99ac');
+            $('#k3').text('--').css('background-color', '#ccc');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('地面').css('background-color', '#e0c068');
+            $('#bk2').text('超能').css('background-color', '#f85888');
+            $('#bk3').text('--').css('background-color', '#ccc');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('毒').css('background-color', '#8D2998');
+            $('#ff2').text('地').css('background-color', '#e0c068');
+            $('#ff3').text('岩石').css('background-color', '#b8a038');
+            $('#ff4').text('幽灵').css('background-color', '#705898');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('钢').css('background-color', '#b8b8d0');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#di').click(function () {
+            $('#content_title').text('地面').css('background-color', '#e0c068');
+            //克制
+            $('#k1').text('火').css('background-color', '#ff4422');
+            $('#k2').text('电').css('background-color', '#ffcc33');
+            $('#k3').text('毒').css('background-color', '#8D2998');
+            $('#k4').text('岩石').css('background-color', '#b8a038');
+            $('#k5').text('钢').css('background-color', '#b8b8d0');
+            //被克制
+            $('#bk1').text('水').css('background-color', '#3399ff');
+            $('#bk2').text('草').css('background-color', '#77cc55');
+            $('#bk3').text('冰').css('background-color', '#77ddff');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('草').css('background-color', '#77cc55');
+            $('#ff2').text('虫').css('background-color', '#aabb22');
+            $('#ff3').text('--').css('background-color', '#ccc');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('飞行').css('background-color', '#a890f0');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#fei').click(function () {
+            $('#content_title').text('飞行').css('background-color', '#a890f0');
+            //克制
+            $('#k1').text('草').css('background-color', '#77cc55');
+            $('#k2').text('格斗').css('background-color', '#c03028');
+            $('#k3').text('虫').css('background-color', '#aabb22');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('电').css('background-color', '#ffcc33');
+            $('#bk2').text('冰').css('background-color', '#77ddff');
+            $('#bk3').text('岩石').css('background-color', '#b8a038');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('电').css('background-color', '#ffcc33');
+            $('#ff2').text('岩石').css('background-color', '#b8a038');
+            $('#ff3').text('钢').css('background-color', '#b8b8d0');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('--').css('background-color', '#ccc');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#chao').click(function () {
+            $('#content_title').text('超能').css('background-color', '#f85888');
+            //克制
+            $('#k1').text('格斗').css('background-color', '#c03028');
+            $('#k2').text('毒').css('background-color', '#8D2998');
+            $('#k3').text('--').css('background-color', '#ccc');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('虫').css('background-color', '#aabb22');
+            $('#bk2').text('幽灵').css('background-color', '#705898');
+            $('#bk3').text('恶').css('background-color', '#775544');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('超能').css('background-color', '#f85888');
+            $('#ff2').text('钢').css('background-color', '#b8b8d0');
+            $('#ff3').text('--').css('background-color', '#ccc');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('恶').css('background-color', '#775544');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#chong').click(function () {
+            $('#content_title').text('虫').css('background-color', '#aabb22');
+            //克制
+            $('#k1').text('草').css('background-color', '#77cc55');
+            $('#k2').text('超能').css('background-color', '#f85888');
+            $('#k3').text('恶').css('background-color', '#775544');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('火').css('background-color', '#ff4422');
+            $('#bk2').text('飞行').css('background-color', '#a890f0');
+            $('#bk3').text('岩石').css('background-color', '#b8a038');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('火').css('background-color', '#ff4422');
+            $('#ff2').text('格斗').css('background-color', '#c03028');
+            $('#ff3').text('毒').css('background-color', '#8D2998');
+            $('#ff4').text('飞行').css('background-color', '#a890f0');
+            $('#ff5').text('幽灵').css('background-color', '#705898');
+            $('#ff6').text('钢').css('background-color', '#b8b8d0');
+            $('#ff7').text('妖精').css('background-color', '#ee99ac');
+            //攻击无效
+            $('#wx1').text('--').css('background-color', '#ccc');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#yan').click(function () {
+            $('#content_title').text('岩石').css('background-color', '#b8a038');
+            //克制
+            $('#k1').text('火').css('background-color', '#ff4422');
+            $('#k2').text('冰').css('background-color', '#77ddff');
+            $('#k3').text('飞行').css('background-color', '#a890f0');
+            $('#k4').text('虫').css('background-color', '#aabb22');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('水').css('background-color', '#3399ff');
+            $('#bk2').text('草').css('background-color', '#77cc55');
+            $('#bk3').text('格斗').css('background-color', '#c03028');
+            $('#bk4').text('地面').css('background-color', '#e0c068');
+            $('#bk5').text('钢').css('background-color', '#b8b8d0');
+            //一半伤害
+            $('#ff1').text('格斗').css('background-color', '#c03028');
+            $('#ff2').text('地面').css('background-color', '#e0c068');
+            $('#ff3').text('钢').css('background-color', '#b8b8d0');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('--').css('background-color', '#ccc');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#gui').click(function () {
+            $('#content_title').text('幽灵').css('background-color', '#705898');
+            //克制
+            $('#k1').text('超能').css('background-color', '#f85888');
+            $('#k2').text('幽灵').css('background-color', '#705898');
+            $('#k3').text('--').css('background-color', '#ccc');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('幽灵').css('background-color', '#705898');
+            $('#bk2').text('恶').css('background-color', '#775544');
+            $('#bk3').text('--').css('background-color', '#ccc');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('恶').css('background-color', '#775544');
+            $('#ff2').text('--').css('background-color', '#ccc');
+            $('#ff3').text('--').css('background-color', '#ccc');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('普通').css('background-color', '#a8a878');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#long').click(function () {
+            $('#content_title').text('龙').css('background-color', '#7766ee');
+            //克制
+            $('#k1').text('龙').css('background-color', '#7766ee');
+            $('#k2').text('--').css('background-color', '#ccc');
+            $('#k3').text('--').css('background-color', '#ccc');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('冰').css('background-color', '#77ddff');
+            $('#bk2').text('龙').css('background-color', '#7766ee');
+            $('#bk3').text('妖精').css('background-color', '#ee99ac');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('钢').css('background-color', '#b8b8d0');
+            $('#ff2').text('--').css('background-color', '#ccc');
+            $('#ff3').text('--').css('background-color', '#ccc');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('幽灵').css('background-color', '#705898');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#er').click(function () {
+            $('#content_title').text('恶').css('background-color', '#775544');
+            //克制
+            $('#k1').text('超能').css('background-color', '#f85888');
+            $('#k2').text('幽灵').css('background-color', '#705898');
+            $('#k3').text('--').css('background-color', '#ccc');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('格斗').css('background-color', '#c03028');
+            $('#bk2').text('虫').css('background-color', '#aabb22');
+            $('#bk3').text('妖精').css('background-color', '#ee99ac');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('格斗').css('background-color', '#c03028');
+            $('#ff2').text('恶').css('background-color', '#775544');
+            $('#ff3').text('妖精').css('background-color', '#ee99ac');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('--').css('background-color', '#ccc');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#gang').click(function () {
+            $('#content_title').text('钢').css('background-color', '#b8b8d0');
+            //克制
+            $('#k1').text('冰').css('background-color', '#77ddff');
+            $('#k2').text('岩石').css('background-color', '#b8a038');
+            $('#k3').text('妖精').css('background-color', '#ee99ac');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('火').css('background-color', '#ff4422');
+            $('#bk2').text('格斗').css('background-color', '#c03028');
+            $('#bk3').text('地面').css('background-color', '#e0c068');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('火').css('background-color', '#ff4422');
+            $('#ff2').text('水').css('background-color', '#3399ff');
+            $('#ff3').text('电').css('background-color', '#ffcc33');
+            $('#ff4').text('钢').css('background-color', '#b8b8d0');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('--').css('background-color', '#ccc');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        $('#yao').click(function () {
+            $('#content_title').text('妖精').css('background-color', '#ee99ac');
+            //克制
+            $('#k1').text('格斗').css('background-color', '#c03028');
+            $('#k2').text('龙').css('background-color', '#7766ee');
+            $('#k3').text('--').css('background-color', '#ccc');
+            $('#k4').text('--').css('background-color', '#ccc');
+            $('#k5').text('--').css('background-color', '#ccc');
+            //被克制
+            $('#bk1').text('毒').css('background-color', '#8D2998');
+            $('#bk2').text('钢').css('background-color', '#b8b8d0');
+            $('#bk3').text('--').css('background-color', '#ccc');
+            $('#bk4').text('--').css('background-color', '#ccc');
+            $('#bk5').text('--').css('background-color', '#ccc');
+            //一半伤害
+            $('#ff1').text('火').css('background-color', '#ff4422');
+            $('#ff2').text('毒').css('background-color', '#8D2998');
+            $('#ff3').text('钢').css('background-color', '#b8b8d0');
+            $('#ff4').text('--').css('background-color', '#ccc');
+            $('#ff5').text('--').css('background-color', '#ccc');
+            $('#ff6').text('--').css('background-color', '#ccc');
+            $('#ff7').text('--').css('background-color', '#ccc');
+            //攻击无效
+            $('#wx1').text('--').css('background-color', '#ccc');
+            $('#wx2').text('--').css('background-color', '#ccc');
+            $('#wx3').text('--').css('background-color', '#ccc');
+
+        })
+        
+    })
+</script>
+</body>
+</html>
